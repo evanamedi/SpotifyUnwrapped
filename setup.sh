@@ -57,4 +57,10 @@ deactivate
 EOL
 chmod +x run_analysis.sh
 
-echo "Setup is complete. To run analysis, place JSON files in the 'Spotify_Extended_Streaming_History' directory and run './run_analysis.sh' "
+mkdir Spotify_Extended_Streaming_History
+
+echo \n\n"Setup is complete."\n
+echo "To run analysis, place JSON files in:"\n 
+echo "Spotify_Extended_Streaming_History"\n\n
+echo "Then run:"\n
+echo "./run_analysis.sh"\n\n

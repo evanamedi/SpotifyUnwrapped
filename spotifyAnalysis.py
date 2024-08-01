@@ -92,6 +92,7 @@ def plot_listening_trends(df):
     plt.show()
 
 def main():
+    print("\n\nWelcome to Spotify Unwrapped\n")
     directory = "Spotify_Extended_Streaming_History"
     year = input("Enter the year to filter by (or press Enter to process all years): ")
     year = year.strip() if year else None
