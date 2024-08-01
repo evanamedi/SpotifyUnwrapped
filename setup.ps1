@@ -9,6 +9,19 @@ function CommandExists {
     return Get-Command $command -ErrorAction SilentlyContinue
 }
 
+# Function to check for Python installation
+function CheckPythonInstallation {
+    if (CommandExists "python3.12") {
+        return "python3.12"
+    } elseif (CommandExists "python3") {
+        return "python3"
+    } elseif (CommandExists "python") {
+        return "python"
+    } else {
+        return $null
+    }
+}
+
 # Step 1: Check if git is installed
 if (-not (CommandExists "git")) {
     Write-Host "Git is not installed. Please install Git and rerun the script."
@@ -22,25 +35,27 @@ if (-not (Test-Path -Path $REPO_DIR)) {
 
 Set-Location -Path $REPO_DIR
 
-# Step 3: Check if Python 3.12 is installed and install it if not
-if (-not (CommandExists "python3.12")) {
-    Write-Host "Python 3.12 is not installed. Installing Python 3.12..."
+# Step 3: Check if Python is installed and install it if not
+$pythonCommand = CheckPythonInstallation
+if (-not $pythonCommand) {
+    Write-Host "Python is not installed. Installing Python 3.12..."
     $pythonInstaller = "https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe"
     $installerPath = "$env:TEMP\python-3.12.0-amd64.exe"
     Invoke-WebRequest -Uri $pythonInstaller -OutFile $installerPath
     Start-Process -Wait -FilePath $installerPath -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1"
     Remove-Item -Path $installerPath
-}
 
-# Verify that python3.12 was installed correctly
-if (-not (CommandExists "python3.12")) {
-    Write-Host "Failed to install Python 3.12. Please install it manually and rerun the script."
-    exit 1
+    # Re-check for Python installation
+    $pythonCommand = CheckPythonInstallation
+    if (-not $pythonCommand) {
+        Write-Host "Failed to install Python 3.12. Please install it manually and rerun the script."
+        exit 1
+    }
 }
 
 # Step 4: Set up a virtual environment
 if (-not (Test-Path -Path "venv")) {
-    python -m venv venv
+    & $pythonCommand -m venv venv
 }
 
 # Step 5: Activate the virtual environment
