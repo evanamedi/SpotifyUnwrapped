@@ -9,14 +9,20 @@ function CommandExists {
     return Get-Command $command -ErrorAction SilentlyContinue
 }
 
-# Step 1: Clone the repository
+# Step 1: Check if git is installed
+if (-not (CommandExists "git")) {
+    Write-Host "Git is not installed. Please install Git and rerun the script."
+    exit 1
+}
+
+# Step 2: Clone the repository
 if (-not (Test-Path -Path $REPO_DIR)) {
     git clone $REPO_URL $REPO_DIR
 }
 
 Set-Location -Path $REPO_DIR
 
-# Step 2: Check if Python 3.12 is installed and install it if not
+# Step 3: Check if Python 3.12 is installed and install it if not
 if (-not (CommandExists "python3.12")) {
     Write-Host "Python 3.12 is not installed. Installing Python 3.12..."
     $pythonInstaller = "https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe"
@@ -32,18 +38,18 @@ if (-not (CommandExists "python3.12")) {
     exit 1
 }
 
-# Step 3: Set up a virtual environment
+# Step 4: Set up a virtual environment
 if (-not (Test-Path -Path "venv")) {
     python -m venv venv
 }
 
-# Step 4: Activate the virtual environment
+# Step 5: Activate the virtual environment
 & .\venv\Scripts\Activate
 
-# Step 5: Install dependencies
+# Step 6: Install dependencies
 pip install -r requirements.txt
 
-# Step 6: Create a script to run the analysis
+# Step 7: Create a script to run the analysis
 $scriptContent = @"
 @echo off
 call venv\Scripts\activate
