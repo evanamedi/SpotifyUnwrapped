@@ -18,7 +18,7 @@ Before you begin, ensure you have the following:
 2. Run the Setup Script:
 
     ```sh
-    curl -s https://raw.githubusercontent.com/yourusername/yourrepo/main/setup.sh | bash
+    curl -s https://raw.githubusercontent.com/evanamedi/SpotifyUnwrapped/main/setup.sh | bash
     ```
 
 ### Windows
@@ -28,7 +28,7 @@ Before you begin, ensure you have the following:
 2. Run the Setup Script:
 
     ```sh
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/yourusername/yourrepo/main/setup.ps1" -OutFile "setup.ps1"
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/evanamedi/SpotifyUnwrapped/main/setup.ps1" -OutFile "setup.ps1"
     .\setup.ps1
     ```
 
