@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO_URL="https://github.com/evanamedi/SpotifyUnwrapped.get"
+REPO_URL="https://github.com/evanamedi/SpotifyUnwrapped.git"
 REPO_DIR="SpotifyUnwrapped"
 
 # check if
