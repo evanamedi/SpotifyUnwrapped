@@ -70,6 +70,7 @@ $scriptContent = @"
 call venv\Scripts\activate
 python spotify_analysis.py
 call venv\Scripts\deactivate
+pause
 "@
 Set-Content -Path "run_analysis.bat" -Value $scriptContent
 
