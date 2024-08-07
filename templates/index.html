@@ -7,41 +7,106 @@
 		<link rel="stylesheet" href="/static/css/style.css" />
 	</head>
 	<body>
-		<h1>Spotify Data Visualization</h1>
-		<form
-			id="upload-form"
-			action="/upload"
-			method="post"
-			enctype="multipart/form-data">
-			<label for="files" class="custom-file-upload"> Choose File </label>
-			<input
-				type="file"
-				name="files[]"
-				id="files"
-				multiple
-				style="display: none"
-				onchange="updateFileLabel()" />
-			<button
-				id="process-files-button"
-				type="button"
-				onclick="processFiles()"
-				style="display: none">
-				Process Files
-			</button>
-		</form>
-
-		<div id="progress-bar" style="display: none">
-			<div id="progress" style="width: 0%"></div>
+		<div id="welcome-intro">
+			<div class="synth-wave">
+				<div class="bar"></div>
+				<div class="bar"></div>
+				<div class="bar"></div>
+				<div class="bar"></div>
+				<div class="bar"></div>
+				<div class="bar"></div>
+				<div class="bar"></div>
+				<div class="bar"></div>
+				<div class="bar"></div>
+				<div class="bar"></div>
+			</div>
+			<div class="button-container">
+				<button id="continue-button" onclick="fadeOutIntro()">
+					Unwrap
+				</button>
+			</div>
+			<div class="synth-wave2">
+				<div class="bar2"></div>
+				<div class="bar2"></div>
+				<div class="bar2"></div>
+				<div class="bar2"></div>
+				<div class="bar2"></div>
+				<div class="bar2"></div>
+				<div class="bar2"></div>
+				<div class="bar2"></div>
+				<div class="bar2"></div>
+				<div class="bar2"></div>
+			</div>
 		</div>
+		<div id="content" style="display: none">
+			<h1>Unwrapped</h1>
+			<form
+				id="upload-form"
+				action="/upload"
+				method="post"
+				enctype="multipart/form-data">
+				<label for="files" class="custom-file-upload">
+					Choose File
+				</label>
+				<input
+					type="file"
+					name="files[]"
+					id="files"
+					multiple
+					style="display: none"
+					onchange="updateFileLabel()" />
+				<button
+					id="process-files-button"
+					type="button"
+					onclick="processFiles()"
+					style="display: none"
+					class="button">
+					Process Files
+				</button>
+			</form>
 
-		<div id="plot-options" style="display: none"></div>
+			<div id="progress-bar" style="display: none">
+				<div id="progress" style="width: 0%"></div>
+			</div>
 
-		<div id="plot"></div>
-		<a id="download-link" style="display: none" download>
-			<button>Download Image</button>
-		</a>
+			<div id="plot-options" style="display: none">
+				<button class="button" onclick="get_Top_tracks()">
+					Top Tracks
+				</button>
+				<button class="button" onclick="get_Top_artists()">
+					Top Artists
+				</button>
+				<button class="button" onclick="get_Listening_trends()">
+					Listening Trends
+				</button>
+			</div>
 
+			<div id="plot"></div>
+			<a id="download-link" style="display: none" download>
+				<button class="button">Download Image</button>
+			</a>
+		</div>
 		<script src="/static/js/analysisCallFunctions.js"></script>
 		<script src="/static/js/script.js"></script>
+		<script>
+			window.onload = function () {
+				setTimeout(() => {
+					const continueButton =
+						document.getElementById("continue-button");
+					continueButton.classList.remove("hidden");
+					continueButton.classList.add("fade-in");
+				}, 4000);
+			};
+
+			function fadeOutIntro() {
+				const intro = document.getElementById("welcome-intro");
+				intro.style.transition = "opacity 1s";
+				intro.style.opacity = "0";
+				setTimeout(() => {
+					intro.style.display = "none";
+					document.getElementById("content").style.display = "block";
+				}, 1000);
+			}
+		</script>
 	</body>
 </html>

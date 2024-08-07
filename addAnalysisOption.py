@@ -26,19 +26,26 @@ def save_analysis_options(analysis_options):
         json.dump(analysis_options, file, indent=4)
 
 def add_button_to_html(process_name, process_title):
-    button_html = f'            <button onclick="get{process_name.capitalize()}()">{process_title}</button>\n'
+    button_html = f'            <button onclick="get_{process_name.capitalize()}()">{process_title}</button>\n'
+    
     with open(HTML_FILE, 'r') as file:
         lines = file.readlines()
     
+    div_found = False
     with open(HTML_FILE, 'w') as file:
         for line in lines:
             file.write(line)
-            if '<div id="plot-options" style="display: none;">' in line:
+            if '<div id="plot-options" style="display: none">' in line and not div_found:
                 file.write(button_html)
-    print(f'Added button for {process_name} to {HTML_FILE}')
+                div_found = True
+                
+    if not div_found:
+        print(f"Error: <div id='plot-options' style='display: none;'> not found in {HTML_FILE}")
+    else:
+        print(f'Added button for {process_name} to {HTML_FILE}')
 
 def add_function_to_js(process_name, process_title):
-    function_name = f"get{process_name.capitalize()}"
+    function_name = f"get_{process_name.capitalize()}"
     function_js = f"""
 function {function_name}() {{
     generatePlot('{process_name}', '{process_title}');
@@ -55,9 +62,7 @@ function {function_name}() {{
         print(f'Function {function_name} already exists in {JS_FUNCTIONS_FILE}')
 
 def add_option_to_plot_route(process_name):
-    plot_option = f"""
-        elif plot_type == '{process_name}':
-            plot_{process_name}(df, output_file)"""
+    plot_option = f"        elif plot_type == '{process_name}':\n            plot_{process_name}(df, output_file)\n"
     
     with open(APP_FILE, 'r') as file:
         lines = file.readlines()
@@ -77,17 +82,27 @@ def add_option_to_plot_route(process_name):
         new_import_line = import_line + f', plot_{process_name}'
         lines[import_line_index] = new_import_line + '\n'
         
+    else_line_index = -1
+    for i, line in enumerate(lines):
+        if line.strip() == 'else:':
+            else_line_index = i
+            break
+    
+    if else_line_index == -1:
+        print(f"Error: 'else:' line not found in {APP_FILE}")
+        return
+
+    lines.insert(else_line_index, plot_option)
+    
     with open(APP_FILE, 'w') as file:
-        for line in lines:
-            file.write(line)
-            if 'else:' in line:
-                file.write(plot_option)
+        file.writelines(lines)
+    
     print(f'Added option for {process_name} to {APP_FILE}')
 
 def add_placeholder_function_to_plotting(process_name):
     function_name = f'plot_{process_name}'
-    function_def = f'def {function_name}(df, output_file:\n)'
-    placeholder_content = f""" # place holder for {process_name} logic
+    function_def = f'def {function_name}(df, output_file):\n'
+    placeholder_content = f"""    # ---------- place holder for {process_name} logic ----------
     plt.figure(figsize=(10, 6))
     plt.text(0.5, 0.5, 'Logic Not Implemented', horizontalalignment='center', verticalalignment='center', fontsize=20, color='red')
     plt.gca().set_facecolor('black')
@@ -102,22 +117,17 @@ def add_placeholder_function_to_plotting(process_name):
         content = file.read()
     
     if function_name not in content:
-        with open(PLOTTING_FILE, 'a') as file:
-            file.write('\n' + function_code)
+        if '__name__' in content:
+            main_index = content.index('if __name__ == "__main__":')
+            content = content[:main_index] + '\n' + function_code + '\n' + content[main_index:]
+        else:
+            content += '\n' + function_code
+
+        with open(PLOTTING_FILE, 'w') as file:
+            file.write(content)
         print(f'Added placeholder function for {process_name} to {PLOTTING_FILE}')
     else:
         print(f'Function {function_name} already exists in {PLOTTING_FILE}')
-        
-    with open(PLOTTING_FILE, 'r') as file:
-        lines = file.readlines()
-    
-    with open(PLOTTING_FILE, 'w') as file:
-        for line in lines:
-            file.write(line)
-            if 'else:' in line and 'Unknown plot type' in line:
-                plot_option = f"    elif plot_type == '{process_name}':\n       {function_name}(df, output_file)\n"
-                file.write(plot_option)
-        print(f"Added plot type handling for {process_name} to the main block of {PLOTTING_FILE}")
 
 def ensure_data_processing_logic(process_name, process_title):
     add_button_to_html(process_name, process_title)

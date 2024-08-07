@@ -7,6 +7,7 @@ import pandas as pd
 from data_processing import load_data, clean_data, save_clean_data
 from plotting import plot_top_artists, plot_top_tracks, plot_listening_trends
 
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 UPLOAD_FOLDER = 'uploads'

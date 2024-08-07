@@ -5,6 +5,7 @@ function updateFileLabel() {
 
 	if (fileInput.files.length > 0) {
 		label.innerText = "Files Selected";
+		label.style.background = "black";
 		processFilesButton.style.display = "inline-block";
 	} else {
 		label.innerText = "Choose File";
@@ -14,6 +15,7 @@ function updateFileLabel() {
 
 function processFiles() {
 	const fileInput = document.getElementById("files");
+	const processFilesButton = document.getElementById("process-files-button");
 	const files = fileInput.files;
 
 	if (files.length === 0) {
@@ -34,6 +36,7 @@ function processFiles() {
 	})
 		.then((response) => {
 			if (response.ok) {
+				processFilesButton.style.background = "black";
 				return response.json();
 			} else {
 				throw new Error("File upload failed");
@@ -122,7 +125,7 @@ function showProgressBar() {
 		if (width >= 100) {
 			clearInterval(interval);
 		} else {
-			width += 10;
+			width += 2;
 			progress.style.width = width + "%";
 		}
 	}, 100);
@@ -132,3 +135,12 @@ function hideProgressBar() {
 	const progressBar = document.getElementById("progress-bar");
 	progressBar.style.display = "none";
 }
+
+function fadeOutWelcomeIntro() {
+	const welcomeIntro = document.getElementById("welcome-intro");
+	welcomeIntro.classList.add("fade-out");
+}
+
+window.onload = function () {
+	setTimeout(fadeOutWelcomeIntro, 1000);
+};

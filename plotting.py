@@ -67,6 +67,7 @@ def plot_listening_trends(df, output_file):
     plt.close()
     print(f"Plot saved to {output_file}")
 
+
 if __name__ == "__main__":
     input_file = sys.argv[1]
     plot_type = sys.argv[2]
