@@ -1,3 +1,7 @@
 /myenv
 /Spotify_Extended_Streaming_History
 .DS_Store
+cleaned_data.csv
+**/__pycache__/
+/uploads
+/static/images

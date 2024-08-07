@@ -1,0 +1,20 @@
+{
+	"processing_options": [
+		{
+			"name": "listening_trends",
+			"title": "Listening Trends"
+		},
+		{
+			"name": "top_artists",
+			"title": "Top Artists"
+		},
+		{
+			"name": "top_tracks",
+			"title": "Top Tracks"
+		},
+		{
+			"name": "testing_script",
+			"title": "Testing Script"
+		}
+	]
+}

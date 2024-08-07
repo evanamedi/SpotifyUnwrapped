@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Spotify Data Visualization</title>
+		<link rel="stylesheet" href="/static/css/style.css" />
+	</head>
+	<body>
+		<h1>Spotify Data Visualization</h1>
+		<form
+			id="upload-form"
+			action="/upload"
+			method="post"
+			enctype="multipart/form-data">
+			<label for="files" class="custom-file-upload"> Choose File </label>
+			<input
+				type="file"
+				name="files[]"
+				id="files"
+				multiple
+				style="display: none"
+				onchange="updateFileLabel()" />
+			<button
+				id="process-files-button"
+				type="button"
+				onclick="processFiles()"
+				style="display: none">
+				Process Files
+			</button>
+		</form>
+
+		<div id="progress-bar" style="display: none">
+			<div id="progress" style="width: 0%"></div>
+		</div>
+
+		<div id="plot-options" style="display: none"></div>
+
+		<div id="plot"></div>
+		<a id="download-link" style="display: none" download>
+			<button>Download Image</button>
+		</a>
+
+		<script src="/static/js/analysisCallFunctions.js"></script>
+		<script src="/static/js/script.js"></script>
+	</body>
+</html>

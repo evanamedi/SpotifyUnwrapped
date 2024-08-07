@@ -5,16 +5,16 @@ import os
 import glob
 
 def load_data(directory, year=None):
-    # Construct the file pattern
+    # file pattern
     if year:
         file_pattern = os.path.join(directory, f"Streaming_History_Audio_{year}_*.json")
     else:
         file_pattern = os.path.join(directory, "Streaming_History_Audio_*.json")
     
-    # List all files matching the pattern
+    # list files matching the pattern
     files = glob.glob(file_pattern)
     
-    # Load and concatenate data from all files
+    # load and concatenate data from all files
     data = []
     for file in files:
         with open(file, 'r') as f:
@@ -24,9 +24,9 @@ def load_data(directory, year=None):
     return df
 
 def clean_data(df):
-    # Convert timestamp to datetime
+    # convert timestamp to datetime
     df['ts'] = pd.to_datetime(df['ts'])
-    # Fill missing values
+    # fill missing values
     df = df.fillna({'episode_name': '', 'episode_show_name': '', 'spotify_episode_uri': ''})
     return df
 
@@ -43,37 +43,27 @@ def listening_trends(df):
     daily_trends = df.groupby('date').size()
     return daily_trends
 
-def plot_top_artists(df, top_n=10):
-    top_artists_df = top_artists(df, top_n)
+def plot_data(data, title, xlabel, ylabel, kind='bar', rotation=45):
     plt.figure(figsize=(10, 6))
-    ax = top_artists_df.plot(kind='bar', color='#39FF14', edgecolor='white')
-    plt.title('Top Artists', fontsize=16, color='white')
-    plt.xlabel('Artists', fontsize=14, color='white')
-    plt.ylabel('Play Count', fontsize=14, color='white')
-    plt.xticks(rotation=45, ha='right', color='white')
+    ax = data.plot(kind=kind, color='#39FF14', edgecolor='white')
+    plt.title(title, fontsize=16, color='white')
+    plt.xlabel(xlabel, fontsize=14, color='white')
+    plt.ylabel(ylabel, fontsize=14, color='white')
+    plt.xticks(rotation=rotation, ha='right', color='white')
     plt.yticks(color='white')
-    plt.ylim(bottom=0)  # Ensure y-axis starts at 0
+    plt.ylim(bottom=0)
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     ax.set_facecolor('black')
     plt.gcf().patch.set_facecolor('black')
-    plt.tight_layout()
     plt.show()
+
+def plot_top_artists(df, top_n=10):
+    top_artists_df = top_artists(df, top_n)
+    plot_data(top_artists_df, 'Top Artists', 'Artists', 'Play Count')
 
 def plot_top_tracks(df, top_n=10):
     top_tracks_df = top_tracks(df, top_n)
-    plt.figure(figsize=(10, 6))
-    ax = top_tracks_df.plot(kind='bar', color='#39FF14', edgecolor='white')
-    plt.title('Top Tracks', fontsize=16, color='white')
-    plt.xlabel('Tracks', fontsize=14, color='white')
-    plt.ylabel('Play Count', fontsize=14, color='white')
-    plt.xticks(rotation=45, ha='right', color='white')
-    plt.yticks(color='white')
-    plt.ylim(bottom=0)  # Ensure y-axis starts at 0
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-    ax.set_facecolor('black')
-    plt.gcf().patch.set_facecolor('black')
-    plt.tight_layout()
-    plt.show()
+    plot_data(top_tracks_df, 'Top Tracks', 'Tracks', 'Play Count')
 
 def plot_listening_trends(df):
     trends = listening_trends(df)
